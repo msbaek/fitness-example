@@ -24,13 +24,15 @@ public class FitnessExample {
         public String invoke() throws Exception {
             if (pageData.hasAttribute("Test")) {
                 if (includeSuiteSetup) {
-                    WikiPage suiteSetup = PageCrawlerImpl.getInheritedPage(SuiteResponder.SUITE_SETUP_NAME, wikiPage);
+                    String pageName = SuiteResponder.SUITE_SETUP_NAME;
+                    WikiPage suiteSetup = PageCrawlerImpl.getInheritedPage(pageName, wikiPage);
                     if (suiteSetup != null) {
                         String mode = "setup";
                         includePage(suiteSetup, mode);
                     }
                 }
-                WikiPage setup = PageCrawlerImpl.getInheritedPage("SetUp", wikiPage);
+                String pageName = "SetUp";
+                WikiPage setup = PageCrawlerImpl.getInheritedPage(pageName, wikiPage);
                 if (setup != null) {
                     String mode = "setup";
                     includePage(setup, mode);
@@ -39,13 +41,15 @@ public class FitnessExample {
 
             buffer.append(pageData.getContent());
             if (pageData.hasAttribute("Test")) {
-                WikiPage teardown = PageCrawlerImpl.getInheritedPage("TearDown", wikiPage);
+                String pageName = "TearDown";
+                WikiPage teardown = PageCrawlerImpl.getInheritedPage(pageName, wikiPage);
                 if (teardown != null) {
                     String mode = "teardown";
                     includePage(teardown, mode);
                 }
                 if (includeSuiteSetup) {
-                    WikiPage suiteTeardown = PageCrawlerImpl.getInheritedPage(SuiteResponder.SUITE_TEARDOWN_NAME, wikiPage);
+                    String pageName1 = SuiteResponder.SUITE_TEARDOWN_NAME;
+                    WikiPage suiteTeardown = PageCrawlerImpl.getInheritedPage(pageName1, wikiPage);
                     if (suiteTeardown != null) {
                         String mode = "teardown";
                         includePage(suiteTeardown, mode);
