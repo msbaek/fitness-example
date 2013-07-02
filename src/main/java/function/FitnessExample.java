@@ -23,26 +23,16 @@ public class FitnessExample {
 
         public String invoke() throws Exception {
             if (pageData.hasAttribute("Test")) {
-                if (includeSuiteSetup) {
-                    String pageName = SuiteResponder.SUITE_SETUP_NAME;
-                    String mode = "setup";
-                    includeInherited(pageName, mode);
-                }
-                String pageName = "SetUp";
-                String mode = "setup";
-                includeInherited(pageName, mode);
+                if (includeSuiteSetup)
+                    includeInherited(SuiteResponder.SUITE_SETUP_NAME, "setup");
+                includeInherited("SetUp", "setup");
             }
 
             buffer.append(pageData.getContent());
             if (pageData.hasAttribute("Test")) {
-                String pageName = "TearDown";
-                String mode = "teardown";
-                includeInherited(pageName, mode);
-                if (includeSuiteSetup) {
-                    String pageName1 = SuiteResponder.SUITE_TEARDOWN_NAME;
-                    String mode1 = "teardown";
-                    includeInherited(pageName1, mode1);
-                }
+                includeInherited("TearDown", "teardown");
+                if (includeSuiteSetup)
+                    includeInherited(SuiteResponder.SUITE_TEARDOWN_NAME, "teardown");
             }
 
             pageData.setContent(buffer.toString());
