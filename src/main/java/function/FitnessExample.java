@@ -12,47 +12,51 @@ public class FitnessExample {
         private PageData pageData;
         private boolean includeSuiteSetup;
         private WikiPage wikiPage;
-        private final StringBuffer buffer;
+        private String content;
 
         public TestableHtmlMaker(PageData pageData, boolean includeSuiteSetup) {
             this.pageData = pageData;
             this.includeSuiteSetup = includeSuiteSetup;
             wikiPage = pageData.getWikiPage();
-            buffer = new StringBuffer();
+            content = new String();
         }
 
         public String invoke() throws Exception {
             if (pageData.hasAttribute("Test")) {
-                includeSetups();
-                buffer.append(pageData.getContent());
-                includeTearDowns();
-                pageData.setContent(buffer.toString());
+                content = includeSetups();
+                content += pageData.getContent();
+                content += includeTearDowns();
+                pageData.setContent(content);
             }
             return pageData.getHtml();
         }
 
-        private void includeTearDowns() throws Exception {
-            includeInherited("TearDown", "teardown");
+        private String includeTearDowns() throws Exception {
+            String tearDowns = includeInherited("TearDown", "teardown");
             if (includeSuiteSetup)
-                includeInherited(SuiteResponder.SUITE_TEARDOWN_NAME, "teardown");
+                tearDowns += includeInherited(SuiteResponder.SUITE_TEARDOWN_NAME, "teardown");
+            return tearDowns;
         }
 
-        private void includeSetups() throws Exception {
+        private String includeSetups() throws Exception {
+            String setUps = "";
             if (includeSuiteSetup)
-                includeInherited(SuiteResponder.SUITE_SETUP_NAME, "setup");
-            includeInherited("SetUp", "setup");
+                setUps += includeInherited(SuiteResponder.SUITE_SETUP_NAME, "setup");
+            setUps += includeInherited("SetUp", "setup");
+            return setUps;
         }
 
-        private void includeInherited(String pageName, String mode) throws Exception {
+        private String includeInherited(String pageName, String mode) throws Exception {
             WikiPage suiteSetup = PageCrawlerImpl.getInheritedPage(pageName, wikiPage);
             if (suiteSetup != null)
-                includePage(suiteSetup, mode);
+                return includePage(suiteSetup, mode);
+            return "";
         }
 
-        private void includePage(WikiPage suiteSetup, String mode) throws Exception {
+        private String includePage(WikiPage suiteSetup, String mode) throws Exception {
             WikiPagePath pagePath = wikiPage.getPageCrawler().getFullPath(suiteSetup);
             String pagePathName = PathParser.render(pagePath);
-            buffer.append("!include -" + mode + " .").append(pagePathName).append("\n");
+            return String.format("!include -%s .%s\n", mode, pagePathName);
         }
     }
 }
