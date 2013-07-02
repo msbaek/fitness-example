@@ -25,16 +25,16 @@ public class FitnessExample {
             if (pageData.hasAttribute("Test")) {
                 if (includeSuiteSetup) {
                     String pageName = SuiteResponder.SUITE_SETUP_NAME;
+                    String mode = "setup";
                     WikiPage suiteSetup = PageCrawlerImpl.getInheritedPage(pageName, wikiPage);
                     if (suiteSetup != null) {
-                        String mode = "setup";
                         includePage(suiteSetup, mode);
                     }
                 }
                 String pageName = "SetUp";
+                String mode = "setup";
                 WikiPage setup = PageCrawlerImpl.getInheritedPage(pageName, wikiPage);
                 if (setup != null) {
-                    String mode = "setup";
                     includePage(setup, mode);
                 }
             }
@@ -42,17 +42,17 @@ public class FitnessExample {
             buffer.append(pageData.getContent());
             if (pageData.hasAttribute("Test")) {
                 String pageName = "TearDown";
+                String mode = "teardown";
                 WikiPage teardown = PageCrawlerImpl.getInheritedPage(pageName, wikiPage);
                 if (teardown != null) {
-                    String mode = "teardown";
                     includePage(teardown, mode);
                 }
                 if (includeSuiteSetup) {
                     String pageName1 = SuiteResponder.SUITE_TEARDOWN_NAME;
+                    String mode1 = "teardown";
                     WikiPage suiteTeardown = PageCrawlerImpl.getInheritedPage(pageName1, wikiPage);
                     if (suiteTeardown != null) {
-                        String mode = "teardown";
-                        includePage(suiteTeardown, mode);
+                        includePage(suiteTeardown, mode1);
                     }
                 }
             }
