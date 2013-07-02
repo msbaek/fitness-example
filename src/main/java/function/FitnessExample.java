@@ -22,12 +22,12 @@ public class FitnessExample {
         }
 
         public String invoke() throws Exception {
-            if (pageData.hasAttribute("Test"))
+            if (pageData.hasAttribute("Test")) {
                 includeSetups();
-            buffer.append(pageData.getContent());
-            if (pageData.hasAttribute("Test"))
+                buffer.append(pageData.getContent());
                 includeTearDowns();
-            pageData.setContent(buffer.toString());
+                pageData.setContent(buffer.toString());
+            }
             return pageData.getHtml();
         }
 
