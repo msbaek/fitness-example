@@ -26,39 +26,33 @@ public class FitnessExample {
                 if (includeSuiteSetup) {
                     String pageName = SuiteResponder.SUITE_SETUP_NAME;
                     String mode = "setup";
-                    WikiPage suiteSetup = PageCrawlerImpl.getInheritedPage(pageName, wikiPage);
-                    if (suiteSetup != null) {
-                        includePage(suiteSetup, mode);
-                    }
+                    includeInherited(pageName, mode);
                 }
                 String pageName = "SetUp";
                 String mode = "setup";
-                WikiPage setup = PageCrawlerImpl.getInheritedPage(pageName, wikiPage);
-                if (setup != null) {
-                    includePage(setup, mode);
-                }
+                includeInherited(pageName, mode);
             }
 
             buffer.append(pageData.getContent());
             if (pageData.hasAttribute("Test")) {
                 String pageName = "TearDown";
                 String mode = "teardown";
-                WikiPage teardown = PageCrawlerImpl.getInheritedPage(pageName, wikiPage);
-                if (teardown != null) {
-                    includePage(teardown, mode);
-                }
+                includeInherited(pageName, mode);
                 if (includeSuiteSetup) {
                     String pageName1 = SuiteResponder.SUITE_TEARDOWN_NAME;
                     String mode1 = "teardown";
-                    WikiPage suiteTeardown = PageCrawlerImpl.getInheritedPage(pageName1, wikiPage);
-                    if (suiteTeardown != null) {
-                        includePage(suiteTeardown, mode1);
-                    }
+                    includeInherited(pageName1, mode1);
                 }
             }
 
             pageData.setContent(buffer.toString());
             return pageData.getHtml();
+        }
+
+        private void includeInherited(String pageName, String mode) throws Exception {
+            WikiPage suiteSetup = PageCrawlerImpl.getInheritedPage(pageName, wikiPage);
+            if (suiteSetup != null)
+                includePage(suiteSetup, mode);
         }
 
         private void includePage(WikiPage suiteSetup, String mode) throws Exception {
