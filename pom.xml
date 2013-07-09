@@ -2,16 +2,16 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>net.daum.tutorials</groupId>
-	<artifactId>fitness-example</artifactId>
+	<artifactId>cleancoders</artifactId>
 	<packaging>war</packaging>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>Fitness Example for Function Refactoring</name>
+	<name>cleancoders Maven Webapp</name>
 	<url>http://maven.apache.org</url>
 	<dependencies>
 		<dependency>
 			<groupId>junit</groupId>
-			<artifactId>junit-dep</artifactId>
-			<version>4.10</version>
+			<artifactId>junit</artifactId>
+			<version>4.8.2</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
@@ -19,13 +19,8 @@
 			<artifactId>fitnesse</artifactId>
 			<version>20081201</version>
 		</dependency>
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit-dep</artifactId>
-            <version>4.10</version>
-        </dependency>
-    </dependencies>
+	</dependencies>
 	<build>
-		<finalName>fitness-example</finalName>
+		<finalName>cleancoders</finalName>
 	</build>
 </project>

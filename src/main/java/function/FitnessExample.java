@@ -5,45 +5,65 @@ import fitnesse.wiki.*;
 
 public class FitnessExample {
     public String testableHtml(PageData pageData, boolean includeSuiteSetup) throws Exception {
-        WikiPage wikiPage = pageData.getWikiPage();
-        StringBuffer buffer = new StringBuffer();
+        return new SetUpTearDownSurrounder(pageData, includeSuiteSetup).surround();
+    }
 
-        if (pageData.hasAttribute("Test")) {
-            if (includeSuiteSetup) {
-                WikiPage suiteSetup = PageCrawlerImpl.getInheritedPage(SuiteResponder.SUITE_SETUP_NAME, wikiPage);
-                if (suiteSetup != null) {
-                    WikiPagePath pagePath = wikiPage.getPageCrawler().getFullPath(suiteSetup);
-                    String pagePathName = PathParser.render(pagePath);
-                    buffer.append("!include -setup .").append(pagePathName).append("\n");
-                }
-            }
-            WikiPage setup = PageCrawlerImpl.getInheritedPage("SetUp", wikiPage);
-            if (setup != null) {
-                WikiPagePath setupPath = wikiPage.getPageCrawler().getFullPath(setup);
-                String setupPathName = PathParser.render(setupPath);
-                buffer.append("!include -setup .").append(setupPathName).append("\n");
-            }
+    private class SetUpTearDownSurrounder {
+        private PageData pageData;
+        private boolean includeSuiteSetup;
+        private WikiPage wikiPage;
+        private String content;
+
+        public SetUpTearDownSurrounder(PageData pageData, boolean includeSuiteSetup) {
+            this.pageData = pageData;
+            this.includeSuiteSetup = includeSuiteSetup;
+            wikiPage = pageData.getWikiPage();
+            content = new String();
         }
 
-        buffer.append(pageData.getContent());
-        if (pageData.hasAttribute("Test")) {
-            WikiPage teardown = PageCrawlerImpl.getInheritedPage("TearDown", wikiPage);
-            if (teardown != null) {
-                WikiPagePath tearDownPath = wikiPage.getPageCrawler().getFullPath(teardown);
-                String tearDownPathName = PathParser.render(tearDownPath);
-                buffer.append("!include -teardown .").append(tearDownPathName).append("\n");
-            }
-            if (includeSuiteSetup) {
-                WikiPage suiteTeardown = PageCrawlerImpl.getInheritedPage(SuiteResponder.SUITE_TEARDOWN_NAME, wikiPage);
-                if (suiteTeardown != null) {
-                    WikiPagePath pagePath = wikiPage.getPageCrawler().getFullPath(suiteTeardown);
-                    String pagePathName = PathParser.render(pagePath);
-                    buffer.append("!include -teardown .").append(pagePathName).append("\n");
-                }
-            }
+        public String surround() throws Exception {
+            if (ifTestPage())
+                surroundPageWithSetUpsAndTearDowns();
+            return pageData.getHtml();
         }
 
-        pageData.setContent(buffer.toString());
-        return pageData.getHtml();
+        private void surroundPageWithSetUpsAndTearDowns() throws Exception {
+            content = includeSetups();
+            content += pageData.getContent();
+            content += includeTearDowns();
+            pageData.setContent(content);
+        }
+
+        private boolean ifTestPage() throws Exception {
+            return pageData.hasAttribute("Test");
+        }
+
+        private String includeTearDowns() throws Exception {
+            String tearDowns = includeInherited("TearDown", "teardown");
+            if (includeSuiteSetup)
+                tearDowns += includeInherited(SuiteResponder.SUITE_TEARDOWN_NAME, "teardown");
+            return tearDowns;
+        }
+
+        private String includeSetups() throws Exception {
+            String setUps = "";
+            if (includeSuiteSetup)
+                setUps += includeInherited(SuiteResponder.SUITE_SETUP_NAME, "setup");
+            setUps += includeInherited("SetUp", "setup");
+            return setUps;
+        }
+
+        private String includeInherited(String pageName, String mode) throws Exception {
+            WikiPage suiteSetup = PageCrawlerImpl.getInheritedPage(pageName, wikiPage);
+            if (suiteSetup != null)
+                return includePage(suiteSetup, mode);
+            return "";
+        }
+
+        private String includePage(WikiPage suiteSetup, String mode) throws Exception {
+            WikiPagePath pagePath = wikiPage.getPageCrawler().getFullPath(suiteSetup);
+            String pagePathName = PathParser.render(pagePath);
+            return String.format("!include -%s .%s\n", mode, pagePathName);
+        }
     }
 }
