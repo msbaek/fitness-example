@@ -19,6 +19,15 @@ git checkout -b try-yourself origin/try-yourself
 	- 절대 맞을 수 없는 값(expected result)과 결과를 비교해서 실패하도록 하고,
 	- 테스트가 성공하도록 expected result를 수정하여 테스트를 성공시킨다.
 
+vim에서 
+
+```language
+\\\ -> \
+\\ -> \
+replaceAll("[-]*\\d+", "");
+```
+
+
 # 3. Extract Method Object - TestableHtmlMaker
 
 - 큰 함수는 클래스이다.
@@ -103,3 +112,47 @@ if (suiteSetup != null) {
 # 10. Extract method - surroundPageWithSetUpsAndTearDowns
 
 # 11. Rename Class#Method - SetUpTearDownSurrounder#surround
+
+# 절차 요약
+
+```language
+1. Characterization Test
+vim에서 \\\ -> \
+\\ -> \
+
+2. extract method object - TestableHtmlMaker
+
+3. extract fields - wikiPage, buffer
+
+4. extract method - includePage
+  4.1 extract variable - setup, teardown
+  4.2 move line up
+  4.3 extract method
+  4.4 inline extracted variable
+  4.5 rename variables
+
+5. extract method - includeInherited
+  5.1 extract variable - setup, teardown
+  5.2 move line up
+  5.3 extract method
+  5.4 inline extracted variable
+  5.5 change signature - remove wikiPage from parameter
+  5.5 rename variables(pageName)
+
+6. Extract method - includeSetups, includeTeardowns
+
+7. merge if statement
+
+8. extract method - isTestPage
+
+9. change StringBuffer to String
+  9.1 rename buffer to content
+  9.2 fix compile error
+  9.3 CQS
+    .9.3.1 invoke에 String을 반환받도록 수정
+    .9.3.1 fix compile error
+
+10. extract method - surroundPageWithSetUpsAndTearDowns
+
+11. rename - SetUpTearDownSurrounder#surround
+```
