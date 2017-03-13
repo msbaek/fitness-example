@@ -156,3 +156,14 @@ vim에서 \\\ -> \
 
 11. rename - SetUpTearDownSurrounder#surround
 ```
+
+# 추가 자료
+
+- [IntelliJ 설치 & 설정](https://github.com/msbaek/memo/blob/master/intellij.md)
+- [동영상 강의자료](https://www.youtube.com/user/codetemplate/videos)
+  - 오늘 강의 부분은
+    - [클린 코더스 강의 3. Function](https://www.youtube.com/watch?v=GYNT7O3rLhU)
+    - [클린 코더스 강의 4. Function Part2](https://www.youtube.com/watch?v=yd2xcVn_pAc&t=1s)
+  - 에 있습니다.
+- [Composed Method Pattern](http://codebetter.com/jeremymiller/2006/12/03/composed-method-pattern/)
+- [Working Effectively with Legacy Code](https://www.amazon.com/Working-Effectively-Legacy-Michael-Feathers/dp/0131177052)
